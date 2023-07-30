@@ -1,0 +1,6 @@
+D:\Project Files\Rider Projects\PowerupSystem\PowerupSystem\PowerupSystem\bin\Debug\PowerupSystem.exe
+D:\Project Files\Rider Projects\PowerupSystem\PowerupSystem\PowerupSystem\bin\Debug\PowerupSystem.pdb
+D:\Project Files\Rider Projects\PowerupSystem\PowerupSystem\PowerupSystem\obj\Debug\PowerupSystem.csproj.AssemblyReference.cache
+D:\Project Files\Rider Projects\PowerupSystem\PowerupSystem\PowerupSystem\obj\Debug\PowerupSystem.csproj.CoreCompileInputs.cache
+D:\Project Files\Rider Projects\PowerupSystem\PowerupSystem\PowerupSystem\obj\Debug\PowerupSystem.exe
+D:\Project Files\Rider Projects\PowerupSystem\PowerupSystem\PowerupSystem\obj\Debug\PowerupSystem.pdb
