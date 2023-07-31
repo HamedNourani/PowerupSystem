@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace PowerupSystem
 {
@@ -7,37 +8,41 @@ namespace PowerupSystem
     {
         public static void Main(string[] args)
         {
-            var shield = new Shield(TimeSpan.FromSeconds(5), new Vector2(1, 2));
-            shield.SetActive(true);
-            var shieldTimer = new Timer();
-            var shieldDurationThread = new Thread(() => ShieldDurationRoutine(shield, shieldTimer));
-            shieldDurationThread.Start();
-            
-            var speedup = new Speedup(TimeSpan.FromSeconds(10), new Vector2(3, 4));
-            speedup.SetActive(true);
+            var speedup = new Speedup(TimeSpan.FromSeconds(5), new Vector2(0, 0));
+            var player1 = new Player("Sonic", 5, 100, speedup, new Vector2(0, 0));
+            player1.ActiveCurrentPowerup();
             var speedupTimer = new Timer();
-            SpeedupDurationRoutine(speedup, speedupTimer);
+            SpeedupDurationRoutine(speedup, speedupTimer, player1);
+            Console.WriteLine();
+            
+            var shield = new Shield(TimeSpan.FromSeconds(10), new Vector2(0, 0));
+            var player2 = new Player("Mario", 3, 100, shield, new Vector2(0, 0));
+            Console.WriteLine($"{player2.Name}'s health: {player2.Health}");
+            var shieldTimer = new Timer();
+            var shieldDurationThread = new Thread(() => ShieldDurationRoutine(shield, shieldTimer, player2));
+            shieldDurationThread.Start();
+            player2.ActiveCurrentPowerup();
         }
         
-        public static void ShieldDurationRoutine(Shield shield, Timer shieldTimer)
+        public static void ShieldDurationRoutine(Shield shield, Timer shieldTimer, Player player)
         {
             while (true)
             {
                 if (DateTime.Now - shieldTimer.StartTime >= shield.Duration)
                 {
-                    shield.SetActive(false);
+                    shield.SetActive(false, player);
                     break;
                 }
             }
         }
         
-        public static void SpeedupDurationRoutine(Speedup speedup, Timer speddupTimer)
+        public static void SpeedupDurationRoutine(Speedup speedup, Timer speddupTimer, Player player)
         {
             while (true)
             {
                 if (DateTime.Now - speddupTimer.StartTime >= speedup.Duration)
                 {
-                    speedup.SetActive(false);
+                    speedup.SetActive(false, player);
                     break;
                 }
             }
@@ -45,13 +50,52 @@ namespace PowerupSystem
     }
 
 
-    public class Powerup
+    public class Player
+    {
+        private float _speed;
+        private int _health;
+
+        public string Name;
+        public Vector2 Position;
+        public Powerup Powerup;
+
+        public float Speed
+        {
+            get => _speed;
+            set => _speed = value;
+        }
+
+        public int Health
+        {
+            get => _health;
+            set => _health = value;
+        }
+
+        public Player(string name, float speed, int health, Powerup powerup, Vector2 position)
+        {
+            _speed = speed;
+            _health = health;
+            Name = name;
+            Powerup = powerup;
+            Position = position;
+        }
+
+        public void ActiveCurrentPowerup()
+        {
+            Powerup.SetActive(true, this);
+        }
+    }
+
+
+    public abstract class Powerup
     {
         protected internal TimeSpan Duration { get; set; }
         protected internal Vector2 Position { get; set; }
         protected internal bool IsActive { get; set; }
 
-        protected internal virtual void SetActive(bool isActive)
+        protected internal Player Player { get; set; }
+
+        protected internal virtual void SetActive(bool isActive, Player owner)
         {
             Console.WriteLine("Powerup is active.");
         }
@@ -66,21 +110,35 @@ namespace PowerupSystem
             Position = position;
         }
 
-        protected internal override void SetActive(bool isActive)
+        protected internal override void SetActive(bool isActive, Player owner)
         {
             IsActive = isActive;
-            CheckIfShieldIsActive();
-        }
-
-        private void CheckIfShieldIsActive()
-        {
+            
             if (IsActive)
             {
-                Console.WriteLine("Shield is active.");
+                Console.WriteLine($"Shield is active for {owner.Name}.");
+                while (IsActive)
+                {
+                    var input = Console.ReadLine();
+                    if (input == "k")
+                    {
+                        owner.Health -= 10;
+                        Console.WriteLine($"{owner.Name}'s health: {owner.Health}");
+                    }
+                }
             }
             else
             {
-                Console.WriteLine("Shield is inactive.");
+                Console.WriteLine($"Shield is inactive for {owner.Name}.");
+                while (!IsActive)
+                {
+                    var input = Console.ReadLine();
+                    if (input == "k")
+                    {
+                        owner.Health -= 20;
+                        Console.WriteLine($"{owner.Name}'s health: {owner.Health}");
+                    }
+                }
             }
         }
     }
@@ -94,7 +152,7 @@ namespace PowerupSystem
             Position = position;
         }
 
-        protected internal override void SetActive(bool isActive)
+        protected internal override void SetActive(bool isActive, Player player)
         {
             IsActive = isActive;
             CheckIfDoubleJumpIsActive();
@@ -116,27 +174,38 @@ namespace PowerupSystem
     
     public class Speedup : Powerup
     {
+        private const float SPEED_MULTIPLIER = 2f;
+
+        private Player owner;
+        
         public Speedup(TimeSpan duration, Vector2 position)
         {
             Duration = duration;
             Position = position;
         }
 
-        protected internal override void SetActive(bool isActive)
+        public void BeCollected(Player player)
         {
-            IsActive = isActive;
-            CheckIfSpeedupIsActive();
+            owner = player;
         }
 
-        private void CheckIfSpeedupIsActive()
+        protected internal override void SetActive(bool isActive, Player owner)
         {
+            if (owner == null)
+                return;
+            IsActive = isActive;
+            
             if (IsActive)
             {
-                Console.WriteLine("Speedup is active.");
+                Console.WriteLine($"Speedup is active for {owner.Name}");
+                owner.Speed *= SPEED_MULTIPLIER;
+                Console.WriteLine($"Current speed of {owner.Name} is: {owner.Speed}");
             }
             else
             {
-                Console.WriteLine("Speedup is inactive.");
+                Console.WriteLine($"Speedup is inactive for {owner.Name}");
+                owner.Speed /= SPEED_MULTIPLIER;
+                Console.WriteLine($"Current speed of {owner.Name} is: {owner.Speed}");
             }
         }
     }
