@@ -8,9 +8,9 @@ namespace PowerupSystem
     {
         public static void Main(string[] args)
         {
-            var speedup = new Speedup(TimeSpan.FromSeconds(5), new Vector2(0, 0));
+            var speedup = new Speedup(TimeSpan.FromSeconds(2), new Vector2(0, 0));
             var player1 = new Player("Sonic", 5, 100, speedup, new Vector2(0, 0));
-            player1.ActiveCurrentPowerup();
+            player1.ActivateCurrentPowerup();
             var speedupTimer = new Timer();
             SpeedupDurationRoutine(speedup, speedupTimer, player1);
             Console.WriteLine();
@@ -21,7 +21,7 @@ namespace PowerupSystem
             var shieldTimer = new Timer();
             var shieldDurationThread = new Thread(() => ShieldDurationRoutine(shield, shieldTimer, player2));
             shieldDurationThread.Start();
-            player2.ActiveCurrentPowerup();
+            player2.ActivateCurrentPowerup();
         }
         
         public static void ShieldDurationRoutine(Shield shield, Timer shieldTimer, Player player)
@@ -30,7 +30,7 @@ namespace PowerupSystem
             {
                 if (DateTime.Now - shieldTimer.StartTime >= shield.Duration)
                 {
-                    shield.SetActive(false, player);
+                    player.DeactivateCurrentPowerup();
                     break;
                 }
             }
@@ -42,7 +42,7 @@ namespace PowerupSystem
             {
                 if (DateTime.Now - speddupTimer.StartTime >= speedup.Duration)
                 {
-                    speedup.SetActive(false, player);
+                    player.DeactivateCurrentPowerup();
                     break;
                 }
             }
@@ -57,7 +57,7 @@ namespace PowerupSystem
 
         public string Name;
         public Vector2 Position;
-        public Powerup Powerup;
+        public IPowerup Powerup;
 
         public float Speed
         {
@@ -71,7 +71,7 @@ namespace PowerupSystem
             set => _health = value;
         }
 
-        public Player(string name, float speed, int health, Powerup powerup, Vector2 position)
+        public Player(string name, float speed, int health, IPowerup powerup, Vector2 position)
         {
             _speed = speed;
             _health = health;
@@ -80,37 +80,41 @@ namespace PowerupSystem
             Position = position;
         }
 
-        public void ActiveCurrentPowerup()
+        public void ActivateCurrentPowerup()
         {
             Powerup.SetActive(true, this);
         }
-    }
-
-
-    public abstract class Powerup
-    {
-        protected internal TimeSpan Duration { get; set; }
-        protected internal Vector2 Position { get; set; }
-        protected internal bool IsActive { get; set; }
-
-        protected internal Player Player { get; set; }
-
-        protected internal virtual void SetActive(bool isActive, Player owner)
+        
+        public void DeactivateCurrentPowerup()
         {
-            Console.WriteLine("Powerup is active.");
+            Powerup.SetActive(false, this);
         }
     }
 
 
-    public class Shield : Powerup
+    public interface IPowerup
+    { 
+        TimeSpan Duration { get; set; }
+        Vector2 Position { get; set; }
+        bool IsActive { get; set; }
+
+        void SetActive(bool isActive, Player owner);
+    }
+
+
+    public class Shield : IPowerup
     {
+        public TimeSpan Duration { get; set; }
+        public Vector2 Position { get; set; }
+        public bool IsActive { get; set; }
+        
         public Shield(TimeSpan duration, Vector2 position)
         {
             Duration = duration;
             Position = position;
         }
 
-        protected internal override void SetActive(bool isActive, Player owner)
+        public void SetActive(bool isActive, Player owner)
         {
             IsActive = isActive;
             
@@ -144,15 +148,19 @@ namespace PowerupSystem
     }
     
     
-    public class DoubleJump : Powerup
+    public class DoubleJump : IPowerup
     {
+        public TimeSpan Duration { get; set; }
+        public Vector2 Position { get; set; }
+        public bool IsActive { get; set; }
+        
         public DoubleJump(TimeSpan duration, Vector2 position)
         {
             Duration = duration;
             Position = position;
         }
 
-        protected internal override void SetActive(bool isActive, Player player)
+        public void SetActive(bool isActive, Player player)
         {
             IsActive = isActive;
             CheckIfDoubleJumpIsActive();
@@ -172,11 +180,13 @@ namespace PowerupSystem
     }
     
     
-    public class Speedup : Powerup
+    public class Speedup : IPowerup
     {
         private const float SPEED_MULTIPLIER = 2f;
 
-        private Player owner;
+        public TimeSpan Duration { get; set; }
+        public Vector2 Position { get; set; }
+        public bool IsActive { get; set; }
         
         public Speedup(TimeSpan duration, Vector2 position)
         {
@@ -184,15 +194,8 @@ namespace PowerupSystem
             Position = position;
         }
 
-        public void BeCollected(Player player)
+        public void SetActive(bool isActive, Player owner)
         {
-            owner = player;
-        }
-
-        protected internal override void SetActive(bool isActive, Player owner)
-        {
-            if (owner == null)
-                return;
             IsActive = isActive;
             
             if (IsActive)
