@@ -1,5 +1,8 @@
+using System;
+
 namespace PowerupSystem
 {
+    // Suppose that all the powerups can be used only once
     public class Player
     {
         private float _speed;
@@ -20,19 +23,37 @@ namespace PowerupSystem
             get => _health;
             set => _health = value;
         }
-
-        public Player(string name, float speed, int health, IPowerup powerup, Vector2 position)
+        
+        // There is no need for powerup and position in constructor
+        public Player(string name, float speed, int health)
         {
             _speed = speed;
             _health = health;
             Name = name;
-            Powerup = powerup;
+        }
+
+        public void SetPosition(Vector2 position)
+        {
             Position = position;
+        }
+
+        public void AddPowerup(IPowerup powerup)
+        {
+            // Handle the old powerup : Override it
+            Powerup = powerup;
         }
 
         public void ActivateCurrentPowerup()
         {
-            Powerup.SetActive(true, this);
+            // Handle the exceptions
+            if (Powerup == null)
+            {
+                Console.WriteLine("There is no powerup collected.");
+            }
+            else
+            {
+                Powerup.SetActive(true, this);
+            }
         }
         
         public void DeactivateCurrentPowerup()

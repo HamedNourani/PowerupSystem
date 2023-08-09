@@ -11,3 +11,10 @@ C:\Users\h.nourani\.a\Rider Projects\PowerupSystem\PowerupSystem\PowerupSystem\o
 C:\Users\h.nourani\.a\Rider Projects\PowerupSystem\PowerupSystem\PowerupSystem\obj\Debug\PowerupSystem.csproj.CoreCompileInputs.cache
 C:\Users\h.nourani\.a\Rider Projects\PowerupSystem\PowerupSystem\PowerupSystem\obj\Debug\PowerupSystem.exe
 C:\Users\h.nourani\.a\Rider Projects\PowerupSystem\PowerupSystem\PowerupSystem\obj\Debug\PowerupSystem.pdb
+D:\Projects\PowerupSystem\PowerupSystem\PowerupSystem\bin\Debug\PowerupSystem.exe
+D:\Projects\PowerupSystem\PowerupSystem\PowerupSystem\bin\Debug\PowerupSystem.pdb
+D:\Projects\PowerupSystem\PowerupSystem\PowerupSystem\obj\Debug\PowerupSystem.csproj.AssemblyReference.cache
+D:\Projects\PowerupSystem\PowerupSystem\PowerupSystem\obj\Debug\PowerupSystem.csproj.SuggestedBindingRedirects.cache
+D:\Projects\PowerupSystem\PowerupSystem\PowerupSystem\obj\Debug\PowerupSystem.csproj.CoreCompileInputs.cache
+D:\Projects\PowerupSystem\PowerupSystem\PowerupSystem\obj\Debug\PowerupSystem.exe
+D:\Projects\PowerupSystem\PowerupSystem\PowerupSystem\obj\Debug\PowerupSystem.pdb
