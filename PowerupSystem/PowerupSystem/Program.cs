@@ -8,23 +8,11 @@ namespace PowerupSystem
     {
         public static void Main(string[] args)
         {
-            var speedup = new Speedup(TimeSpan.FromSeconds(5), new Vector2(0f, 0f));
-            var player1 = new Player("Sonic", 10, 100);
-            player1.SetPosition(new Vector2(0f, 0f));
-            player1.AddPowerup(speedup);
-            player1.ActivateCurrentPowerup();
-            var speedupTimer = new Timer();
-            SpeedupDurationRoutine(speedup, speedupTimer, player1);
-            Console.WriteLine();
-            Console.ReadLine();
-
-            // var shield = new Shield(TimeSpan.FromSeconds(10), new Vector2(0, 0));
-            // var player2 = new Player("Mario", 3, 100);
-            // Console.WriteLine($"{player2.Name}'s health: {player2.Health}");
-            // var shieldTimer = new Timer();
-            // var shieldDurationThread = new Thread(() => ShieldDurationRoutine(shield, shieldTimer, player2));
-            // shieldDurationThread.Start();
-            // player2.ActivateCurrentPowerup();
+            while (true)
+            {
+                string command = Console.ReadLine();
+                HandleCommand(command);
+            }
 
             // Sonic : 10
             // Mario : 10
@@ -38,26 +26,123 @@ namespace PowerupSystem
             // shm = add shield powerup to mario
             // as = activate sonic powerup
             // am = activate mario powerup
-
         }
         
-        public static void ShieldDurationRoutine(Shield shield, Timer shieldTimer, Player player)
+        private static void HandleCommand(string command)
         {
-            while (true)
+            switch (command)
             {
-                if (DateTime.Now - shieldTimer.StartTime >= shield.Duration)
-                {
-                    player.DeactivateCurrentPowerup();
+                case "is":
+                    InstantiateSonic();
                     break;
-                }
+                case "asps": 
+                    AddSpeedPowerupToSonic();
+                    break;
+                case "ashps":
+                    AddShieldPowerupToSonic();
+                    break;
+                case "asp":
+                    ActivateSonicPowerup();
+                    break;
+                case "im":
+                    InstantiateMario();
+                    break;
+                case "aspm": 
+                    AddSpeedPowerupToMario();
+                    break;
+                case "ashpm":
+                    AddShieldPowerupToMario();
+                    break;
+                case "amp":
+                    ActivateMarioPowerup();
+                    break;
             }
         }
         
-        public static void SpeedupDurationRoutine(Speedup speedup, Timer speddupTimer, Player player)
+        private static void InstantiateSonic()
+        {
+            var sonic = new Player("Sonic", 10f, 100);
+            sonic.SetPosition(new Vector2(0f, 0f));
+            Console.WriteLine("Sonic instantiated.");
+        }
+
+        private static void AddSpeedPowerupToSonic()
+        {
+            var sonic = GetPlayer("Sonic");
+            var speedup = new Speedup(TimeSpan.FromSeconds(10f), new Vector2(0f, 0f));
+            sonic.AddPowerup(speedup);
+            Console.WriteLine("Speedup added to Sonic.");
+        }
+        
+        private static void AddShieldPowerupToSonic()
+        {
+            var sonic = GetPlayer("Sonic");
+            var shield = new Shield(TimeSpan.FromSeconds(10f), new Vector2(0f, 0f));
+            sonic.AddPowerup(shield);
+            Console.WriteLine("Shield added to Sonic.");
+        }
+
+        private static void ActivateSonicPowerup()
+        {
+            var sonic = GetPlayer("Sonic");
+            var timer = new Timer();
+            var powerupDurationThread = new Thread(() => PowerupDurationRoutine(sonic.Powerup, timer, sonic));
+            powerupDurationThread.Start();
+            sonic.ActivateCurrentPowerup();
+            powerupDurationThread.Join();
+        }
+        
+        private static void InstantiateMario()
+        {
+            var mario = new Player("Mario", 5f, 100);
+            mario.SetPosition(new Vector2(0f, 0f));
+            Console.WriteLine("Mario instantiated.");
+        }
+        
+        private static void AddSpeedPowerupToMario()
+        {
+            var mario = GetPlayer("Mario");
+            var speedup = new Speedup(TimeSpan.FromSeconds(10f), new Vector2(0f, 0f));
+            mario.AddPowerup(speedup);
+            Console.WriteLine("Speedup added to Mario.");
+        }
+        
+        private static void AddShieldPowerupToMario()
+        {
+            var mario = GetPlayer("Mario");
+            var shield = new Shield(TimeSpan.FromSeconds(10f), new Vector2(0f, 0f));
+            mario.AddPowerup(shield);
+            Console.WriteLine("Shield added to Mario.");
+        }
+        
+        private static void ActivateMarioPowerup()
+        {
+            var mario = GetPlayer("Mario");
+            var timer = new Timer();
+            var powerupDurationThread = new Thread(() => PowerupDurationRoutine(mario.Powerup, timer, mario));
+            powerupDurationThread.Start();
+            mario.ActivateCurrentPowerup();
+            powerupDurationThread.Join();
+        }
+
+        private static Player GetPlayer(string name)
+        {
+            foreach (var player in Player.Players)
+            {
+                if (player.Name == name)
+                {
+                    return player;
+                }
+            }
+
+            return null;
+        }
+
+        private static void PowerupDurationRoutine(IPowerup powerup, Timer timer, Player player)
         {
             while (true)
             {
-                if (DateTime.Now - speddupTimer.StartTime >= speedup.Duration)
+                if (DateTime.Now - timer.StartTime >= powerup.Duration)
                 {
                     player.DeactivateCurrentPowerup();
                     break;

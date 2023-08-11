@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace PowerupSystem
 {
@@ -11,6 +12,9 @@ namespace PowerupSystem
         public string Name;
         public Vector2 Position;
         public IPowerup Powerup;
+        public int Damage = 20;
+
+        public static List<Player> Players = new List<Player>();
 
         public float Speed
         {
@@ -30,6 +34,8 @@ namespace PowerupSystem
             _speed = speed;
             _health = health;
             Name = name;
+            
+            Players.Add(this);
         }
 
         public void SetPosition(Vector2 position)

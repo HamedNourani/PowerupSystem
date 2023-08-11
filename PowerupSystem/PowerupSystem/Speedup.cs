@@ -25,6 +25,7 @@ namespace PowerupSystem
                 Console.WriteLine($"Speedup is active for {owner.Name}");
                 owner.Speed *= SPEED_MULTIPLIER;
                 Console.WriteLine($"Current speed of {owner.Name} is: {owner.Speed}");
+                
                 while (IsActive)
                 {
                     var input = Console.ReadLine();
@@ -40,6 +41,7 @@ namespace PowerupSystem
                 Console.WriteLine($"Speedup is inactive for {owner.Name}");
                 owner.Speed /= SPEED_MULTIPLIER;
                 Console.WriteLine($"Current speed of {owner.Name} is: {owner.Speed}");
+                
                 while (!IsActive)
                 {
                     var input = Console.ReadLine();
@@ -47,6 +49,10 @@ namespace PowerupSystem
                     {
                         owner.Position.X += owner.Speed;
                         Console.WriteLine($"Current X position of {owner.Name} is: {owner.Position.X}");
+                    }
+                    else
+                    {
+                        break;
                     }
                 }
             }

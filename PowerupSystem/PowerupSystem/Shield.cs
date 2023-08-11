@@ -17,16 +17,19 @@ namespace PowerupSystem
         public void SetActive(bool isActive, Player owner)
         {
             IsActive = isActive;
-            
+
             if (IsActive)
             {
                 Console.WriteLine($"Shield is active for {owner.Name}.");
+                Console.WriteLine($"{owner.Name}'s health: {owner.Health}");
+                owner.Damage /= 2;
+                
                 while (IsActive)
                 {
                     var input = Console.ReadLine();
                     if (input == "k")
                     {
-                        owner.Health -= 10;
+                        owner.Health -= owner.Damage;
                         Console.WriteLine($"{owner.Name}'s health: {owner.Health}");
                     }
                 }
@@ -34,13 +37,19 @@ namespace PowerupSystem
             else
             {
                 Console.WriteLine($"Shield is inactive for {owner.Name}.");
+                owner.Damage *= 2;
+                
                 while (!IsActive)
                 {
                     var input = Console.ReadLine();
                     if (input == "k")
                     {
-                        owner.Health -= 20;
+                        owner.Health -= owner.Damage;
                         Console.WriteLine($"{owner.Name}'s health: {owner.Health}");
+                    }
+                    else
+                    {
+                        break;
                     }
                 }
             }
