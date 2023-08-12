@@ -16,46 +16,18 @@ namespace PowerupSystem
             Position = position;
         }
 
-        public void SetActive(bool isActive, Player owner)
+        public void SetActive(bool isActive, Player player)
         {
             IsActive = isActive;
-            
-            // if (IsActive)
-            // {
-            //     Console.WriteLine($"Speedup is active for {owner.Name}");
-            //     owner.Speed *= SPEED_MULTIPLIER;
-            //     Console.WriteLine($"Current speed of {owner.Name} is: {owner.Speed}");
-            //     
-            //     while (IsActive)
-            //     {
-            //         var input = Console.ReadLine();
-            //         if (input == "m")
-            //         {
-            //             owner.Position.X += owner.Speed;
-            //             Console.WriteLine($"Current X position of {owner.Name} is: {owner.Position.X}");
-            //         }
-            //     }
-            // }
-            // else
-            // {
-            //     Console.WriteLine($"Speedup is inactive for {owner.Name}");
-            //     owner.Speed /= SPEED_MULTIPLIER;
-            //     Console.WriteLine($"Current speed of {owner.Name} is: {owner.Speed}");
-            //     
-            //     while (!IsActive)
-            //     {
-            //         var input = Console.ReadLine();
-            //         if (input == "m")
-            //         {
-            //             owner.Position.X += owner.Speed;
-            //             Console.WriteLine($"Current X position of {owner.Name} is: {owner.Position.X}");
-            //         }
-            //         else
-            //         {
-            //             break;
-            //         }
-            //     }
-            // }
+
+            if (IsActive)
+            {
+                player.Speed *= SPEED_MULTIPLIER;
+            }
+            else
+            {
+                player.Speed /= SPEED_MULTIPLIER;
+            }
         }
     }
 }

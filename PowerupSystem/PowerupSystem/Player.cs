@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace PowerupSystem
 {
-    // Suppose that all the powerups can be used only once
     public class Player
     {
         private float _speed;
@@ -12,7 +11,7 @@ namespace PowerupSystem
         public string Name;
         public Vector2 Position;
         public IPowerup Powerup;
-        public float Damage = 20;
+        public float Damage = 20f;
 
         public static List<Player> Players = new List<Player>();
 
@@ -28,7 +27,6 @@ namespace PowerupSystem
             set => _health = value;
         }
         
-        // There is no need for powerup and position in constructor
         public Player(string name, float speed, int health)
         {
             _speed = speed;
@@ -45,7 +43,6 @@ namespace PowerupSystem
 
         public void AddPowerup(IPowerup powerup)
         {
-            // Handle the old powerup : Override it
             Powerup = powerup;
         }
 

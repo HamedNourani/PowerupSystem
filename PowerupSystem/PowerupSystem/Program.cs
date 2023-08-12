@@ -55,6 +55,9 @@ namespace PowerupSystem
                 case "km":
                     DamageMario();
                     break;
+                default:
+                    PrintErrorMessage(command);
+                    break;
             }
         }
         
@@ -68,43 +71,68 @@ namespace PowerupSystem
         private static void AddSpeedPowerupToSonic()
         {
             var sonic = GetPlayer("Sonic");
-            var speedup = new Speedup(TimeSpan.FromSeconds(30f), new Vector2(0f, 0f));
-            sonic.AddPowerup(speedup);
-            Console.WriteLine("Speedup added to Sonic.");
+
+            if (sonic != null)
+            {
+                var speedup = new Speedup(TimeSpan.FromSeconds(30f), new Vector2(0f, 0f));
+                sonic.AddPowerup(speedup);
+                Console.WriteLine("Speedup added to Sonic.");
+            }
+            else
+            {
+                Console.WriteLine("Sonic is not instantiated! Instantiate it.");
+            }
         }
         
         private static void AddShieldPowerupToSonic()
         {
             var sonic = GetPlayer("Sonic");
-            var shield = new Shield(TimeSpan.FromSeconds(30f), new Vector2(0f, 0f));
-            sonic.AddPowerup(shield);
-            Console.WriteLine("Shield added to Sonic.");
+
+            if (sonic != null)
+            {
+                var shield = new Shield(TimeSpan.FromSeconds(30f), new Vector2(0f, 0f));
+                sonic.AddPowerup(shield);
+                Console.WriteLine("Shield added to Sonic.");
+            }
+            else
+            {
+                Console.WriteLine("Sonic is not instantiated! Instantiate it.");
+            }
         }
 
         private static void ActivateSonicPowerup()
         {
             var sonic = GetPlayer("Sonic");
 
-            if (sonic.Powerup != null)
+            if (sonic != null)
             {
-                var timer = new Timer();
-                var powerupDurationThread = new Thread(() => PowerupDurationRoutine(sonic.Powerup, timer, sonic));
-                powerupDurationThread.Start();
-                sonic.ActivateCurrentPowerup();
-                if (sonic.Powerup is Speedup)
+                if (sonic.Powerup != null)
                 {
-                    Console.WriteLine($"Speedup is active for Sonic");
-                    Console.WriteLine($"Current speed of Sonic is: {sonic.Speed}");
+                    sonic.ActivateCurrentPowerup();
+                
+                    var timer = new Timer();
+                    var powerupDurationThread = new Thread(() => PowerupDurationRoutine(sonic.Powerup, timer, sonic));
+                    powerupDurationThread.Start();
+
+                    if (sonic.Powerup is Speedup)
+                    {
+                        Console.WriteLine($"Speedup is active for Sonic");
+                        Console.WriteLine($"Current speed of Sonic is: {sonic.Speed}");
+                    }
+                    else if (sonic.Powerup is Shield)
+                    {
+                        Console.WriteLine($"Shield is active for Sonic.");
+                        Console.WriteLine($"Sonic's health: {sonic.Health}");
+                    }
                 }
                 else
                 {
-                    Console.WriteLine($"Shield is active for Sonic.");
-                    Console.WriteLine($"Sonic's health: {sonic.Health}");
+                    Console.WriteLine("No powerup is added to Sonic! Add one.");
                 }
             }
             else
             {
-                Console.WriteLine("No powerup added to Sonic! Add one.");
+                Console.WriteLine("Sonic is not instantiated! Instantiate it.");
             }
         }
         
@@ -118,107 +146,160 @@ namespace PowerupSystem
         private static void AddSpeedPowerupToMario()
         {
             var mario = GetPlayer("Mario");
-            var speedup = new Speedup(TimeSpan.FromSeconds(30f), new Vector2(0f, 0f));
-            mario.AddPowerup(speedup);
-            Console.WriteLine("Speedup added to Mario.");
+
+            if (mario != null)
+            {
+                var speedup = new Speedup(TimeSpan.FromSeconds(30f), new Vector2(0f, 0f));
+                mario.AddPowerup(speedup);
+                Console.WriteLine("Speedup added to Mario.");
+            }
+            else
+            {
+                Console.WriteLine("Mario is not instantiated! Instantiate it.");
+            }
         }
         
         private static void AddShieldPowerupToMario()
         {
             var mario = GetPlayer("Mario");
-            var shield = new Shield(TimeSpan.FromSeconds(30f), new Vector2(0f, 0f));
-            mario.AddPowerup(shield);
-            Console.WriteLine("Shield added to Mario.");
+
+            if (mario != null)
+            {
+                var shield = new Shield(TimeSpan.FromSeconds(30f), new Vector2(0f, 0f));
+                mario.AddPowerup(shield);
+                Console.WriteLine("Shield added to Mario.");
+            }
+            else
+            {
+                Console.WriteLine("Mario is not instantiated! Instantiate it.");
+            }
         }
         
         private static void ActivateMarioPowerup()
         {
             var mario = GetPlayer("Mario");
-            
-            if (mario.Powerup != null)
+
+            if (mario != null)
             {
-                var timer = new Timer();
-                var powerupDurationThread = new Thread(() => PowerupDurationRoutine(mario.Powerup, timer, mario));
-                powerupDurationThread.Start();
-                mario.ActivateCurrentPowerup();
-                if (mario.Powerup is Speedup)
+                if (mario.Powerup != null)
                 {
-                    Console.WriteLine($"Speedup is active for Mario");
-                    Console.WriteLine($"Current speed of Mario is: {mario.Speed}");
+                    mario.ActivateCurrentPowerup();
+                
+                    var timer = new Timer();
+                    var powerupDurationThread = new Thread(() => PowerupDurationRoutine(mario.Powerup, timer, mario));
+                    powerupDurationThread.Start();
+
+                    if (mario.Powerup is Speedup)
+                    {
+                        Console.WriteLine($"Speedup is active for Mario");
+                        Console.WriteLine($"Current speed of Mario is: {mario.Speed}");
+                    }
+                    else if (mario.Powerup is Shield)
+                    {
+                        Console.WriteLine($"Shield is active for Mario.");
+                        Console.WriteLine($"Mario's health: {mario.Health}");
+                    }
                 }
                 else
                 {
-                    Console.WriteLine($"Shield is active for Mario.");
-                    Console.WriteLine($"Mario's health: {mario.Health}");
+                    Console.WriteLine("No powerup is added to Mario! Add one.");
                 }
             }
             else
             {
-                Console.WriteLine("No powerup added to Mario! Add one.");
+                Console.WriteLine("Mario is not instantiated! Instantiate it.");
             }
         }
 
         private static void MoveSonic()
         {
-            var sonic = GetPlayer("Sonic");
+            try
+            {
+                var sonic = GetPlayer("Sonic");
             
-            if (sonic.Powerup != null && sonic.Powerup is Speedup && sonic.Powerup.IsActive)
-            {
-                sonic.Position.X += sonic.Speed * 2f;
-                Console.WriteLine($"Current X position of {sonic.Name} is: {sonic.Position.X}");
+                if (sonic.Powerup != null && sonic.Powerup is Speedup && sonic.Powerup.IsActive)
+                {
+                    sonic.Position.X += sonic.Speed;
+                    Console.WriteLine($"Current X position of Sonic is: {sonic.Position.X}");
+                }
+                else
+                {
+                    sonic.Position.X += sonic.Speed;
+                    Console.WriteLine($"Current X position of Sonic is: {sonic.Position.X}");
+                }
             }
-            else
+            catch (NullReferenceException)
             {
-                sonic.Position.X += sonic.Speed;
-                Console.WriteLine($"Current X position of {sonic.Name} is: {sonic.Position.X}");
+                Console.WriteLine("Sonic is not instantiated! Instantiate it.");
             }
         }
         
         private static void MoveMario()
         {
-            var mario = GetPlayer("Mario");
+            try
+            {
+                var mario = GetPlayer("Mario");
             
-            if (mario.Powerup != null && mario.Powerup is Speedup && mario.Powerup.IsActive)
-            {
-                mario.Position.X += mario.Speed * 2f;
-                Console.WriteLine($"Current X position of {mario.Name} is: {mario.Position.X}");
+                if (mario.Powerup != null && mario.Powerup is Speedup && mario.Powerup.IsActive)
+                {
+                    mario.Position.X += mario.Speed;
+                    Console.WriteLine($"Current X position of Mario is: {mario.Position.X}");
+                }
+                else
+                {
+                    mario.Position.X += mario.Speed;
+                    Console.WriteLine($"Current X position of Mario is: {mario.Position.X}");
+                }
             }
-            else
+            catch (NullReferenceException)
             {
-                mario.Position.X += mario.Speed;
-                Console.WriteLine($"Current X position of {mario.Name} is: {mario.Position.X}");
+                Console.WriteLine("Mario is not instantiated! Instantiate it.");
             }
         }
 
         private static void DamageSonic()
         {
-            var sonic = GetPlayer("Sonic");
+            try
+            {
+                var sonic = GetPlayer("Sonic");
             
-            if (sonic.Powerup != null && sonic.Powerup is Shield && sonic.Powerup.IsActive)
-            {
-                sonic.Health -= sonic.Damage / 2f;
-                Console.WriteLine($"Current health of {sonic.Name} is: {sonic.Health}");
+                if (sonic.Powerup != null && sonic.Powerup is Shield && sonic.Powerup.IsActive)
+                {
+                    sonic.Health -= sonic.Damage;
+                    Console.WriteLine($"Current health of Sonic is: {sonic.Health}");
+                }
+                else
+                {
+                    sonic.Health -= sonic.Damage;
+                    Console.WriteLine($"Current health of Sonic is: {sonic.Health}");
+                }
             }
-            else
+            catch (NullReferenceException)
             {
-                sonic.Health -= sonic.Damage;
-                Console.WriteLine($"Current health of {sonic.Name} is: {sonic.Health}");
+                Console.WriteLine("Sonic is not instantiated! Instantiate it.");
             }
         }
         
         private static void DamageMario()
         {
-            var mario = GetPlayer("Mario");
+            try
+            {
+                var mario = GetPlayer("Mario");
             
-            if (mario.Powerup != null && mario.Powerup is Shield && mario.Powerup.IsActive)
-            {
-                mario.Health -= mario.Damage / 2f;
-                Console.WriteLine($"Current health of {mario.Name} is: {mario.Health}");
+                if (mario.Powerup != null && mario.Powerup is Shield && mario.Powerup.IsActive)
+                {
+                    mario.Health -= mario.Damage;
+                    Console.WriteLine($"Current health of Mario is: {mario.Health}");
+                }
+                else
+                {
+                    mario.Health -= mario.Damage;
+                    Console.WriteLine($"Current health of Mario is: {mario.Health}");
+                }
             }
-            else
+            catch (NullReferenceException)
             {
-                mario.Health -= mario.Damage;
-                Console.WriteLine($"Current health of {mario.Name} is: {mario.Health}");
+                Console.WriteLine("Mario is not instantiated! Instantiate it.");
             }
         }
 
@@ -242,9 +323,25 @@ namespace PowerupSystem
                 if (DateTime.Now - timer.StartTime >= powerup.Duration)
                 {
                     player.DeactivateCurrentPowerup();
+                    
+                    if (powerup is Speedup)
+                    {
+                        Console.WriteLine($"Speedup is inactive for {player.Name}.");
+                        Console.WriteLine($"Current speed of {player.Name} is: {player.Speed}");
+                    }
+                    else if (powerup is Shield)
+                    {
+                        Console.WriteLine($"Shield is inactive for {player.Name}.");
+                    }
+                    
                     break;
                 }
             }
+        }
+
+        private static void PrintErrorMessage(string command)
+        {
+            Console.WriteLine($"'{command}' is not recognized as a valid command.");
         }
     }
 }
