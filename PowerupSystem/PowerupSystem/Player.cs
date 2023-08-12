@@ -7,12 +7,12 @@ namespace PowerupSystem
     public class Player
     {
         private float _speed;
-        private int _health;
+        private float _health;
 
         public string Name;
         public Vector2 Position;
         public IPowerup Powerup;
-        public int Damage = 20;
+        public float Damage = 20;
 
         public static List<Player> Players = new List<Player>();
 
@@ -22,7 +22,7 @@ namespace PowerupSystem
             set => _speed = value;
         }
 
-        public int Health
+        public float Health
         {
             get => _health;
             set => _health = value;

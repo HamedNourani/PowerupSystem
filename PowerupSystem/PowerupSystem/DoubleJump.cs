@@ -7,9 +7,7 @@ namespace PowerupSystem
         public TimeSpan Duration { get; set; }
         public Vector2 Position { get; set; }
         public bool IsActive { get; set; }
-        
-        public PowerupTypes PowerupType { get; set; } = PowerupTypes.DoubleJump;
-        
+
         public DoubleJump(TimeSpan duration, Vector2 position)
         {
             Duration = duration;

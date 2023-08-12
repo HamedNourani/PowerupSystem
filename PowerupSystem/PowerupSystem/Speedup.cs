@@ -10,8 +10,6 @@ namespace PowerupSystem
         public Vector2 Position { get; set; }
         public bool IsActive { get; set; }
 
-        public PowerupTypes PowerupType { get; set; } = PowerupTypes.Speedup;
-        
         public Speedup(TimeSpan duration, Vector2 position)
         {
             Duration = duration;
@@ -22,42 +20,42 @@ namespace PowerupSystem
         {
             IsActive = isActive;
             
-            if (IsActive)
-            {
-                Console.WriteLine($"Speedup is active for {owner.Name}");
-                owner.Speed *= SPEED_MULTIPLIER;
-                Console.WriteLine($"Current speed of {owner.Name} is: {owner.Speed}");
-                
-                while (IsActive)
-                {
-                    var input = Console.ReadLine();
-                    if (input == "m")
-                    {
-                        owner.Position.X += owner.Speed;
-                        Console.WriteLine($"Current X position of {owner.Name} is: {owner.Position.X}");
-                    }
-                }
-            }
-            else
-            {
-                Console.WriteLine($"Speedup is inactive for {owner.Name}");
-                owner.Speed /= SPEED_MULTIPLIER;
-                Console.WriteLine($"Current speed of {owner.Name} is: {owner.Speed}");
-                
-                while (!IsActive)
-                {
-                    var input = Console.ReadLine();
-                    if (input == "m")
-                    {
-                        owner.Position.X += owner.Speed;
-                        Console.WriteLine($"Current X position of {owner.Name} is: {owner.Position.X}");
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-            }
+            // if (IsActive)
+            // {
+            //     Console.WriteLine($"Speedup is active for {owner.Name}");
+            //     owner.Speed *= SPEED_MULTIPLIER;
+            //     Console.WriteLine($"Current speed of {owner.Name} is: {owner.Speed}");
+            //     
+            //     while (IsActive)
+            //     {
+            //         var input = Console.ReadLine();
+            //         if (input == "m")
+            //         {
+            //             owner.Position.X += owner.Speed;
+            //             Console.WriteLine($"Current X position of {owner.Name} is: {owner.Position.X}");
+            //         }
+            //     }
+            // }
+            // else
+            // {
+            //     Console.WriteLine($"Speedup is inactive for {owner.Name}");
+            //     owner.Speed /= SPEED_MULTIPLIER;
+            //     Console.WriteLine($"Current speed of {owner.Name} is: {owner.Speed}");
+            //     
+            //     while (!IsActive)
+            //     {
+            //         var input = Console.ReadLine();
+            //         if (input == "m")
+            //         {
+            //             owner.Position.X += owner.Speed;
+            //             Console.WriteLine($"Current X position of {owner.Name} is: {owner.Position.X}");
+            //         }
+            //         else
+            //         {
+            //             break;
+            //         }
+            //     }
+            // }
         }
     }
 }
