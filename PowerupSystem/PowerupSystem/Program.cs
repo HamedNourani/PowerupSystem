@@ -56,6 +56,12 @@ namespace PowerupSystem
                 case "amp":
                     ActivateMarioPowerup();
                     break;
+                case "ms":
+                    MoveSonic();
+                    break;
+                case "mm":
+                    MoveMario();
+                    break;
             }
         }
         
@@ -85,11 +91,19 @@ namespace PowerupSystem
         private static void ActivateSonicPowerup()
         {
             var sonic = GetPlayer("Sonic");
-            var timer = new Timer();
-            var powerupDurationThread = new Thread(() => PowerupDurationRoutine(sonic.Powerup, timer, sonic));
-            powerupDurationThread.Start();
-            sonic.ActivateCurrentPowerup();
-            powerupDurationThread.Join();
+
+            if (sonic.Powerup != null)
+            {
+                var timer = new Timer();
+                var powerupDurationThread = new Thread(() => PowerupDurationRoutine(sonic.Powerup, timer, sonic));
+                powerupDurationThread.Start();
+                sonic.ActivateCurrentPowerup();
+                powerupDurationThread.Join();
+            }
+            else
+            {
+                Console.WriteLine("No powerup added to Sonic! Add one.");
+            }
         }
         
         private static void InstantiateMario()
@@ -118,11 +132,51 @@ namespace PowerupSystem
         private static void ActivateMarioPowerup()
         {
             var mario = GetPlayer("Mario");
-            var timer = new Timer();
-            var powerupDurationThread = new Thread(() => PowerupDurationRoutine(mario.Powerup, timer, mario));
-            powerupDurationThread.Start();
-            mario.ActivateCurrentPowerup();
-            powerupDurationThread.Join();
+            
+            if (mario.Powerup != null)
+            {
+                var timer = new Timer();
+                var powerupDurationThread = new Thread(() => PowerupDurationRoutine(mario.Powerup, timer, mario));
+                powerupDurationThread.Start();
+                mario.ActivateCurrentPowerup();
+                powerupDurationThread.Join();
+            }
+            else
+            {
+                Console.WriteLine("No powerup added to Mario! Add one.");
+            }
+        }
+
+        private static void MoveSonic()
+        {
+            var sonic = GetPlayer("Sonic");
+            
+            if (sonic.Powerup != null && sonic.Powerup.PowerupType == PowerupTypes.Speedup && sonic.Powerup.IsActive)
+            {
+                sonic.Position.X += sonic.Speed * 2f;
+                Console.WriteLine($"Current X position of {sonic.Name} is: {sonic.Position.X}");
+            }
+            else
+            {
+                sonic.Position.X += sonic.Speed;
+                Console.WriteLine($"Current X position of {sonic.Name} is: {sonic.Position.X}");
+            }
+        }
+        
+        private static void MoveMario()
+        {
+            var mario = GetPlayer("Mario");
+            
+            if (mario.Powerup != null && mario.Powerup.PowerupType == PowerupTypes.Speedup && mario.Powerup.IsActive)
+            {
+                mario.Position.X += mario.Speed * 2f;
+                Console.WriteLine($"Current X position of {mario.Name} is: {mario.Position.X}");
+            }
+            else
+            {
+                mario.Position.X += mario.Speed;
+                Console.WriteLine($"Current X position of {mario.Name} is: {mario.Position.X}");
+            }
         }
 
         private static Player GetPlayer(string name)

@@ -9,6 +9,8 @@ namespace PowerupSystem
         public TimeSpan Duration { get; set; }
         public Vector2 Position { get; set; }
         public bool IsActive { get; set; }
+
+        public PowerupTypes PowerupType { get; set; } = PowerupTypes.Speedup;
         
         public Speedup(TimeSpan duration, Vector2 position)
         {

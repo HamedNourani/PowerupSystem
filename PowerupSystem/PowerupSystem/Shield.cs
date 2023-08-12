@@ -7,6 +7,8 @@ namespace PowerupSystem
         public TimeSpan Duration { get; set; }
         public Vector2 Position { get; set; }
         public bool IsActive { get; set; }
+
+        public PowerupTypes PowerupType { get; set; } = PowerupTypes.Shield;
         
         public Shield(TimeSpan duration, Vector2 position)
         {

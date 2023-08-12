@@ -51,15 +51,7 @@ namespace PowerupSystem
 
         public void ActivateCurrentPowerup()
         {
-            // Handle the exceptions
-            if (Powerup == null)
-            {
-                Console.WriteLine("There is no powerup collected.");
-            }
-            else
-            {
-                Powerup.SetActive(true, this);
-            }
+            Powerup.SetActive(true, this);
         }
         
         public void DeactivateCurrentPowerup()
