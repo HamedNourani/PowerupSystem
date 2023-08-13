@@ -203,47 +203,26 @@ namespace PowerupSystem
 
         private static void DamageSonic()
         {
-            try
-            {
-                var sonic = GetPlayer("Sonic");
-            
-                if (sonic.Powerup != null && sonic.Powerup is Shield && sonic.Powerup.IsActive)
-                {
-                    sonic.Health -= sonic.Damage;
-                    Console.WriteLine($"Current health of Sonic is: {sonic.Health}");
-                }
-                else
-                {
-                    sonic.Health -= sonic.Damage;
-                    Console.WriteLine($"Current health of Sonic is: {sonic.Health}");
-                }
-            }
-            catch (NullReferenceException)
-            {
-                Console.WriteLine("Sonic is not instantiated! Instantiate it.");
-            }
+            var sonic = GetPlayer("Sonic");
+            DamagePlayer(sonic);
         }
         
         private static void DamageMario()
         {
-            try
+            var mario = GetPlayer("Mario");
+            DamagePlayer(mario);
+        }
+
+        private static void DamagePlayer(Player player)
+        {
+            if (player != null)
             {
-                var mario = GetPlayer("Mario");
-            
-                if (mario.Powerup != null && mario.Powerup is Shield && mario.Powerup.IsActive)
-                {
-                    mario.Health -= mario.Damage;
-                    Console.WriteLine($"Current health of Mario is: {mario.Health}");
-                }
-                else
-                {
-                    mario.Health -= mario.Damage;
-                    Console.WriteLine($"Current health of Mario is: {mario.Health}");
-                }
+                player.Health -= player.Damage;
+                Console.WriteLine($"Current health of {player.Name} is: {player.Health}");
             }
-            catch (NullReferenceException)
+            else
             {
-                Console.WriteLine("Mario is not instantiated! Instantiate it.");
+                Console.WriteLine($"{player.Name} is not instantiated! Instantiate it.");
             }
         }
 
