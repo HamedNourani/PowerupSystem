@@ -140,29 +140,24 @@ namespace PowerupSystem
         
         private static void AddSpeedPowerupToMario()
         {
-            var mario = GetPlayer("Mario");
-
-            if (mario != null)
-            {
-                var speedup = new Speedup(TimeSpan.FromSeconds(30f), new Vector2(0f, 0f));
-                mario.AddPowerup(speedup);
-                Console.WriteLine("Speedup added to Mario.");
-            }
-            else
-            {
-                Console.WriteLine("Mario is not instantiated! Instantiate it.");
-            }
+            var speedup = new Speedup(TimeSpan.FromSeconds(30f), new Vector2(0f, 0f));
+            AddPowerupToMario(speedup);
         }
         
         private static void AddShieldPowerupToMario()
+        {
+            var shield = new Shield(TimeSpan.FromSeconds(30f), new Vector2(0f, 0f));
+            AddPowerupToMario(shield);
+        }
+        
+        private static void AddPowerupToMario(IPowerup powerup)
         {
             var mario = GetPlayer("Mario");
 
             if (mario != null)
             {
-                var shield = new Shield(TimeSpan.FromSeconds(30f), new Vector2(0f, 0f));
-                mario.AddPowerup(shield);
-                Console.WriteLine("Shield added to Mario.");
+                mario.AddPowerup(powerup);
+                Console.WriteLine($"{powerup.GetType().Name} added to Mario.");
             }
             else
             {
@@ -186,7 +181,7 @@ namespace PowerupSystem
 
                     if (mario.Powerup is Speedup)
                     {
-                        Console.WriteLine($"Speedup is active for Mario");
+                        Console.WriteLine($"Speedup is active for Mario.");
                         Console.WriteLine($"Current speed of Mario is: {mario.Speed}");
                     }
                     else if (mario.Powerup is Shield)
