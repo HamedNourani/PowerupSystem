@@ -178,47 +178,26 @@ namespace PowerupSystem
 
         private static void MoveSonic()
         {
-            try
-            {
-                var sonic = GetPlayer("Sonic");
-            
-                if (sonic.Powerup != null && sonic.Powerup is Speedup && sonic.Powerup.IsActive)
-                {
-                    sonic.Position.X += sonic.Speed;
-                    Console.WriteLine($"Current X position of Sonic is: {sonic.Position.X}");
-                }
-                else
-                {
-                    sonic.Position.X += sonic.Speed;
-                    Console.WriteLine($"Current X position of Sonic is: {sonic.Position.X}");
-                }
-            }
-            catch (NullReferenceException)
-            {
-                Console.WriteLine("Sonic is not instantiated! Instantiate it.");
-            }
+            var sonic = GetPlayer("Sonic");
+            MovePlayer(sonic);
         }
         
         private static void MoveMario()
         {
-            try
+            var mario = GetPlayer("Mario");
+            MovePlayer(mario);
+        }
+
+        private static void MovePlayer(Player player)
+        {
+            if (player != null)
             {
-                var mario = GetPlayer("Mario");
-            
-                if (mario.Powerup != null && mario.Powerup is Speedup && mario.Powerup.IsActive)
-                {
-                    mario.Position.X += mario.Speed;
-                    Console.WriteLine($"Current X position of Mario is: {mario.Position.X}");
-                }
-                else
-                {
-                    mario.Position.X += mario.Speed;
-                    Console.WriteLine($"Current X position of Mario is: {mario.Position.X}");
-                }
+                player.Position.X += player.Speed;
+                Console.WriteLine($"Current X position of {player.Name} is: {player.Position.X}");
             }
-            catch (NullReferenceException)
+            else
             {
-                Console.WriteLine("Mario is not instantiated! Instantiate it.");
+                Console.WriteLine($"{player.Name} is not instantiated! Instantiate it.");
             }
         }
 
@@ -291,11 +270,13 @@ namespace PowerupSystem
                     
                     if (powerup is Speedup)
                     {
+                        Console.WriteLine();
                         Console.WriteLine($"Speedup is inactive for {player.Name}.");
                         Console.WriteLine($"Current speed of {player.Name} is: {player.Speed}");
                     }
                     else if (powerup is Shield)
                     {
+                        Console.WriteLine();
                         Console.WriteLine($"Shield is inactive for {player.Name}.");
                     }
                     
