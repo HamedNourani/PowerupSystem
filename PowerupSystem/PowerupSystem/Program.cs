@@ -70,29 +70,24 @@ namespace PowerupSystem
 
         private static void AddSpeedPowerupToSonic()
         {
-            var sonic = GetPlayer("Sonic");
+            var speedup = new Speedup(TimeSpan.FromSeconds(30f), new Vector2(0f, 0f));
+            AddPowerupToSonic(speedup);
+        }
 
-            if (sonic != null)
-            {
-                var speedup = new Speedup(TimeSpan.FromSeconds(30f), new Vector2(0f, 0f));
-                sonic.AddPowerup(speedup);
-                Console.WriteLine("Speedup added to Sonic.");
-            }
-            else
-            {
-                Console.WriteLine("Sonic is not instantiated! Instantiate it.");
-            }
+        private static void AddShieldPowerupToSonic()
+        {
+            var shield = new Shield(TimeSpan.FromSeconds(30f), new Vector2(0f, 0f));
+            AddPowerupToSonic(shield);
         }
         
-        private static void AddShieldPowerupToSonic()
+        private static void AddPowerupToSonic(IPowerup powerup)
         {
             var sonic = GetPlayer("Sonic");
 
             if (sonic != null)
             {
-                var shield = new Shield(TimeSpan.FromSeconds(30f), new Vector2(0f, 0f));
-                sonic.AddPowerup(shield);
-                Console.WriteLine("Shield added to Sonic.");
+                sonic.AddPowerup(powerup);
+                Console.WriteLine($"{powerup.GetType().Name} added to Sonic.");
             }
             else
             {
