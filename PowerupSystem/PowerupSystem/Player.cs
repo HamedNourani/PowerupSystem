@@ -54,6 +54,7 @@ namespace PowerupSystem
         public void DeactivateCurrentPowerup()
         {
             Powerup.SetActive(false, this);
+            Powerup = null;
         }
     }
 }

@@ -172,7 +172,7 @@ namespace PowerupSystem
             }
             else
             {
-                Console.WriteLine($"{player.Name} is not instantiated! Instantiate it.");
+                Console.WriteLine($"Player is not instantiated! Instantiate it.");
             }
         }
 
@@ -197,7 +197,7 @@ namespace PowerupSystem
             }
             else
             {
-                Console.WriteLine($"{player.Name} is not instantiated! Instantiate it.");
+                Console.WriteLine($"Player is not instantiated! Instantiate it.");
             }
         }
 
@@ -222,7 +222,7 @@ namespace PowerupSystem
             }
             else
             {
-                Console.WriteLine($"{player.Name} is not instantiated! Instantiate it.");
+                Console.WriteLine($"Player is not instantiated! Instantiate it.");
             }
         }
 
