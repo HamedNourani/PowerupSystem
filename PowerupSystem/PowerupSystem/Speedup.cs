@@ -4,16 +4,15 @@ namespace PowerupSystem
 {
     public class Speedup : IPowerup
     {
-        private const float SPEED_MULTIPLIER = 2f;
+        private float _speedMultiplier;
 
         public TimeSpan Duration { get; set; }
-        public Vector2 Position { get; set; }
         public bool IsActive { get; set; }
 
-        public Speedup(TimeSpan duration, Vector2 position)
+        public Speedup(TimeSpan duration, float speedMultiplier)
         {
             Duration = duration;
-            Position = position;
+            _speedMultiplier = speedMultiplier;
         }
 
         public void SetActive(bool isActive, Player player)
@@ -22,11 +21,11 @@ namespace PowerupSystem
 
             if (IsActive)
             {
-                player.Speed *= SPEED_MULTIPLIER;
+                player.Speed *= _speedMultiplier;
             }
             else
             {
-                player.Speed /= SPEED_MULTIPLIER;
+                player.Speed /= _speedMultiplier;
             }
         }
     }

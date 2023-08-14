@@ -6,6 +6,8 @@ namespace PowerupSystem
 {
     internal class Program
     {
+        public static List<Player> Players = new List<Player>();
+        
         public static void Main(string[] args)
         {
             while (true)
@@ -49,10 +51,10 @@ namespace PowerupSystem
                 case "mm":
                     MoveMario();
                     break;
-                case "ks":
+                case "mks":
                     DamageSonic();
                     break;
-                case "km":
+                case "skm":
                     DamageMario();
                     break;
                 default:
@@ -63,20 +65,21 @@ namespace PowerupSystem
         
         private static void InstantiateSonic()
         {
-            var sonic = new Player("Sonic", 10f, 100);
+            var sonic = new Player("Sonic", 10f, 100f, 20f);
             sonic.SetPosition(new Vector2(0f, 0f));
+            Players.Add(sonic);
             Console.WriteLine("Sonic instantiated.");
         }
 
         private static void AddSpeedPowerupToSonic()
         {
-            var speedup = new Speedup(TimeSpan.FromSeconds(30f), new Vector2(0f, 0f));
+            var speedup = new Speedup(TimeSpan.FromSeconds(30f), 2f);
             AddPowerupToSonic(speedup);
         }
 
         private static void AddShieldPowerupToSonic()
         {
-            var shield = new Shield(TimeSpan.FromSeconds(30f), new Vector2(0f, 0f));
+            var shield = new Shield(TimeSpan.FromSeconds(30f), 0.5f);
             AddPowerupToSonic(shield);
         }
         
@@ -100,24 +103,24 @@ namespace PowerupSystem
             var sonic = GetPlayer("Sonic");
             ActivatePowerup(sonic);
         }
-
         
         private static void InstantiateMario()
         {
-            var mario = new Player("Mario", 5f, 100);
+            var mario = new Player("Mario", 5f, 100f, 10f);
             mario.SetPosition(new Vector2(0f, 0f));
+            Players.Add(mario);
             Console.WriteLine("Mario instantiated.");
         }
         
         private static void AddSpeedPowerupToMario()
         {
-            var speedup = new Speedup(TimeSpan.FromSeconds(30f), new Vector2(0f, 0f));
+            var speedup = new Speedup(TimeSpan.FromSeconds(30f), 2f);
             AddPowerupToMario(speedup);
         }
         
         private static void AddShieldPowerupToMario()
         {
-            var shield = new Shield(TimeSpan.FromSeconds(30f), new Vector2(0f, 0f));
+            var shield = new Shield(TimeSpan.FromSeconds(30f), 0.5f);
             AddPowerupToMario(shield);
         }
         
@@ -204,21 +207,23 @@ namespace PowerupSystem
         private static void DamageSonic()
         {
             var sonic = GetPlayer("Sonic");
-            DamagePlayer(sonic);
+            var mario = GetPlayer("Mario");
+            DamageFromTo(mario, sonic);
         }
         
         private static void DamageMario()
         {
             var mario = GetPlayer("Mario");
-            DamagePlayer(mario);
+            var sonic = GetPlayer("Sonic");
+            DamageFromTo(sonic, mario);
         }
 
-        private static void DamagePlayer(Player player)
+        private static void DamageFromTo(Player attacker, Player receiver)
         {
-            if (player != null)
+            if (attacker != null && receiver != null)
             {
-                player.Health -= player.Damage;
-                Console.WriteLine($"Current health of {player.Name} is: {player.Health}");
+                receiver.TakeDamage(attacker.AttackPower);
+                Console.WriteLine($"Current health of {receiver.Name} is: {receiver.Health}");
             }
             else
             {
@@ -228,7 +233,7 @@ namespace PowerupSystem
 
         private static Player GetPlayer(string name)
         {
-            foreach (var player in Player.Players)
+            foreach (var player in Players)
             {
                 if (player.Name == name)
                 {

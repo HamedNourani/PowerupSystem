@@ -5,13 +5,11 @@ namespace PowerupSystem
     public class DoubleJump : IPowerup
     {
         public TimeSpan Duration { get; set; }
-        public Vector2 Position { get; set; }
         public bool IsActive { get; set; }
 
-        public DoubleJump(TimeSpan duration, Vector2 position)
+        public DoubleJump(TimeSpan duration)
         {
             Duration = duration;
-            Position = position;
         }
 
         public void SetActive(bool isActive, Player player)

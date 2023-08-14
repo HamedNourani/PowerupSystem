@@ -4,28 +4,21 @@ namespace PowerupSystem
 {
     public class Shield : IPowerup
     {
+        private float _barrierFactor;
         public TimeSpan Duration { get; set; }
-        public Vector2 Position { get; set; }
         public bool IsActive { get; set; }
 
-        public Shield(TimeSpan duration, Vector2 position)
+        public float BarrierFactor => _barrierFactor;
+
+        public Shield(TimeSpan duration, float barrierFactor)
         {
             Duration = duration;
-            Position = position;
+            _barrierFactor = barrierFactor;
         }
-
+        
         public void SetActive(bool isActive, Player player)
         {
             IsActive = isActive;
-
-            if (IsActive)
-            {
-                player.Damage /= 2f;
-            }
-            else
-            {
-                player.Damage *= 2f;
-            }
         }
     }
 }
